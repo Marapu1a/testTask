@@ -1,0 +1,46 @@
+[
+    {
+        "model": "offices.office",
+        "pk": 1,
+        "fields": {
+            "name": "Главный офис",
+            "address": "г. Москва, ул. Примерная, 1"
+        }
+    },
+    {
+        "model": "offices.room",
+        "pk": 1,
+        "fields": {
+            "office": 1,
+            "number": "101",
+            "capacity": 10
+        }
+    },
+    {
+        "model": "offices.room",
+        "pk": 2,
+        "fields": {
+            "office": 1,
+            "number": "102",
+            "capacity": 8
+        }
+    },
+    {
+        "model": "offices.workplace",
+        "pk": 1,
+        "fields": {
+            "room": 1,
+            "number": "1",
+            "is_occupied": false
+        }
+    },
+    {
+        "model": "offices.workplace",
+        "pk": 2,
+        "fields": {
+            "room": 1,
+            "number": "2",
+            "is_occupied": true
+        }
+    }
+]

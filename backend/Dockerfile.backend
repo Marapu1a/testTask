@@ -1,11 +1,20 @@
-# backend/Dockerfile.backend
-FROM python:3.9
+# Базовый образ с Python
+FROM python:3.10
 
+# Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
+# Копируем requirements.txt и устанавливаем зависимости
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY . .
+# Копируем все файлы проекта в контейнер
+COPY . /app
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Настраиваем переменные окружения для Django
+ENV DJANGO_SETTINGS_MODULE=main.settings
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Выполняем миграции и запускаем сервер
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
