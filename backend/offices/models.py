@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User  # Импортируем модель пользователя для связи с бронированием
 
 # Модель, представляющая офис
 class Office(models.Model):
@@ -35,3 +36,17 @@ class Workplace(models.Model):
     def __str__(self):
         # Отображение рабочего места с номером и привязкой к комнате
         return f"Workplace {self.number} in {self.room}"
+
+# Модель бронирования рабочего места
+class Booking(models.Model):
+    # Рабочее место, которое бронируется
+    workplace = models.ForeignKey(Workplace, on_delete=models.CASCADE, related_name='bookings')
+    # Пользователь, забронировавший место
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
+    # Время начала бронирования
+    start_time = models.DateTimeField()
+    # Время окончания бронирования
+    end_time = models.DateTimeField()
+
+    def __str__(self):
+        return f"Booking by {self.user} from {self.start_time} to {self.end_time}"
