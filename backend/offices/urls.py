@@ -1,17 +1,15 @@
-from django.urls import include, path
-from rest_framework import routers
-from .views import OfficeViewSet, RoomViewSet, WorkplaceViewSet, BookingViewSet  # Импорт BookingViewSet
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import OfficeViewSet, RoomViewSet, WorkplaceViewSet, BookingViewSet
 
-# Роутер для автоматического создания маршрутов
-router = routers.DefaultRouter()
+# Создаем роутер и регистрируем в нем наши ViewSets
+router = DefaultRouter()
 router.register(r'offices', OfficeViewSet)
 router.register(r'rooms', RoomViewSet)
 router.register(r'workplaces', WorkplaceViewSet)
-
-# Регистрируем маршруты для бронирований
 router.register(r'bookings', BookingViewSet)
 
-# Подключение маршрутов через роутер
+# Подключаем маршруты к API
 urlpatterns = [
     path('', include(router.urls)),
 ]

@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g=a(*7fc#fh4($q(y)m3m+)5s%on39_sroq#i#$lijllda5*69'
+SECRET_KEY = 'django-insecure-_bv*r9x1%go_s7xy3(+)j=8+!pk)3844d8xf!zu2b9v&)^eflv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'offices',
-    'rest_framework',  # Подключение DRF
+    'offices',  # Добавили наше приложение
+    'rest_framework',  # Подключаем Django REST Framework
 ]
 
 MIDDLEWARE = [
@@ -124,11 +124,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'offices.CustomUser'
+
 # Django REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',  # JSON по умолчанию
-        'rest_framework.renderers.BrowsableAPIRenderer',  # Панель DRF
+        'rest_framework.renderers.BrowsableAPIRenderer',  # Для панели DRF
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -137,7 +139,3 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',  # Доступ только авторизованным
     ],
 }
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
