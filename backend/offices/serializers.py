@@ -28,7 +28,8 @@ class WorkplaceSerializer(serializers.ModelSerializer):
 # Сериализатор для модели Booking с проверкой пересечения времени
 class BookingSerializer(serializers.ModelSerializer):
     workplace = serializers.PrimaryKeyRelatedField(queryset=Workplace.objects.all())
-    
+    user = serializers.PrimaryKeyRelatedField(read_only=True)  # Делаем поле только для чтения
+
     class Meta:
         model = Booking
         fields = ['id', 'workplace', 'user', 'start_time', 'end_time']
