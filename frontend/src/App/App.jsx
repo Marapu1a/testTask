@@ -6,33 +6,34 @@ import MainContent from '../MainContent/MainContent';
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            setAuthToken(token);
-            setIsAuthenticated(true);
-        }
-    }, []);
+  useEffect(() => {
+    // При загрузке компонента проверяем, есть ли токен в localStorage
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuthToken(token);  // Устанавливаем токен для авторизации
+      setIsAuthenticated(true);  // Обновляем состояние авторизации
+    }
+  }, []);
 
     const handleLogin = (token) => {
         setAuthToken(token);
         setIsAuthenticated(true);
     };
 
-    const handleLogout = () => {
-        logoutUser();
-        setIsAuthenticated(false);
-    };
+  const handleLogout = () => {
+    logoutUser();  // Очищаем токен из заголовков и localStorage
+    setIsAuthenticated(false);  // Сбрасываем авторизацию
+  };
 
-    return (
-        <div>
-            {isAuthenticated ? (
-                <MainContent onLogout={handleLogout} />
-            ) : (
-                <Login onLogin={handleLogin} />
-            )}
-        </div>
-    );
+  return (
+    <div>
+      {isAuthenticated ? (
+        <MainContent onLogout={handleLogout} />  // Основной контент для авторизованных пользователей
+      ) : (
+        <Login onLogin={handleLogin} />  // Форма авторизации для неавторизованных пользователей
+      )}
+    </div>
+  );
 }
 
 export default App;

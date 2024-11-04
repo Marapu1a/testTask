@@ -17,4 +17,5 @@ urlpatterns = [
     path('api/create-user/', UserCreateView.as_view(), name='create_user'),  # Добавляем маршрут для создания пользователя
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Токены
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/', include('offices.urls')),  # Добавляем пути из `offices/urls.py`
 ]

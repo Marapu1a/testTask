@@ -25,40 +25,80 @@ export const refreshAuthToken = async () => {
 
 // Логин пользователя
 export const loginUser = async (email, password) => {
-    const response = await axios.post(`${API_URL}/token/`, { email, password });
-    const { access, refresh } = response.data;
-    setAuthToken(access);
-    localStorage.setItem('refreshToken', refresh);
-    return access;
+    try {
+        const response = await axios.post(`${API_URL}/token/`, { email, password });
+        const token = response.data.access;
+        setAuthToken(token);
+        return token;
+    } catch (error) {
+        console.error('Ошибка при входе:', error);
+        throw error;
+    }
+};
+
+// Функция для выхода
+export const logoutUser = () => {
+    setAuthToken(null);
 };
 
 // Получение списка офисов
-export const fetchOffices = async () => {
-    const response = await axios.get(`${API_URL}/offices/`);
-    return response.data;
+export const getOffices = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/offices/`);
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при получении офисов:', error);
+        throw error;
+    }
 };
 
-// Получение доступности комнат для офиса
-export const getRoomAvailability = async (officeId) => {
-    const response = await axios.get(`${API_URL}/bookings/room_availability/`, {
-        params: { office: officeId },
-    });
-    return response.data;
+// Получение списка комнат для выбранного офиса
+export const getRooms = async (officeId) => {
+    try {
+        const response = await axios.get(`${API_URL}/get_rooms/${officeId}/`);
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при получении комнат:', error);
+        throw error;
+    }
 };
 
-// Создание бронирования
-export const createBooking = async (roomId, workplaceId, startTime, endTime) => {
-    const response = await axios.post(`${API_URL}/bookings/`, {
-        room: roomId,
-        workplace: workplaceId,
-        start_time: startTime,
-        end_time: endTime,
-    });
-    return response.data;
+// Получение всех рабочих мест для выбранной комнаты (включая занятые и свободные)
+export const getWorkplaces = async (roomId) => {
+    try {
+        const response = await axios.get(`${API_URL}/get_workplaces/${roomId}/`);
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при получении рабочих мест:', error);
+        throw error;
+    }
 };
 
-// Логаут пользователя
-export const logoutUser = () => {
-    setAuthToken(null);
-    localStorage.removeItem('refreshToken');
+// Получение всех бронирований и фильтрация для конкретного рабочего места
+export const getActiveBookingsForWorkplace = async (workplaceId) => {
+    try {
+        const response = await axios.get(`${API_URL}/bookings/`);
+        const allBookings = response.data;
+
+        const activeBookings = allBookings.filter(booking =>
+            booking.workplace === workplaceId &&
+            new Date(booking.end_time) > new Date()
+        );
+
+        return activeBookings;
+    } catch (error) {
+        console.error('Ошибка при получении бронирований:', error);
+        throw error;
+    }
+};
+
+// Получение информации о пользователе по ID
+export const getUserById = async (userId) => {
+    try {
+        const response = await axios.get(`${API_URL}/users/${userId}/`);
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при получении информации о пользователе:', error);
+        throw error;
+    }
 };
