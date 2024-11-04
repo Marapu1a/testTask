@@ -16,4 +16,5 @@ urlpatterns = [
     path('api/', include(router.urls)),  # Подключаем роутер, теперь `/api/` покажет корневой список эндпоинтов
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Токены
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/', include('offices.urls')),  # Добавляем пути из `offices/urls.py`
 ]

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { setAuthToken, logoutUser } from '../api';
-import Login from '../Login';
+import Login from '../Login/Login';
 import MainContent from '../MainContent/MainContent';
 
 function App() {

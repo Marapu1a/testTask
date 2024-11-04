@@ -18,9 +18,9 @@ export const setAuthToken = (token) => {
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/token/`, { email, password });
-    const token = response.data.access;  // Получаем access-токен из ответа
-    setAuthToken(token);  // Сохраняем токен
-    return token;  // Возвращаем токен, чтобы использовать его при входе
+    const token = response.data.access;
+    setAuthToken(token);
+    return token;
   } catch (error) {
     console.error('Ошибка при входе:', error);
     throw error;
@@ -29,16 +29,39 @@ export const loginUser = async (email, password) => {
 
 // Функция для выхода
 export const logoutUser = () => {
-  setAuthToken(null);  // Удаляем токен из заголовков и localStorage
+  setAuthToken(null);
 };
 
-// Пример запроса для получения списка офисов
+// Получение списка офисов
 export const getOffices = async () => {
   try {
     const response = await axios.get(`${API_URL}/offices/`);
     return response.data;
   } catch (error) {
     console.error('Ошибка при получении офисов:', error);
+    throw error;
+  }
+};
+
+// Получение списка комнат для выбранного офиса
+export const getRooms = async (officeId) => {
+  try {
+    const response = await axios.get(`${API_URL}/get_rooms/${officeId}/`);
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении комнат:', error);
+    throw error;
+  }
+};
+
+// Получение всех рабочих мест для выбранной комнаты (включая занятые и свободные)
+export const getWorkplaces = async (roomId) => {
+  try {
+    const response = await axios.get(`${API_URL}/get_workplaces/${roomId}/`);
+    console.log("API Ответ для рабочих мест:", response.data);  // Отладка ответа от API
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении рабочих мест:', error);
     throw error;
   }
 };
