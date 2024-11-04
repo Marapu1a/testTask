@@ -6,23 +6,25 @@ from django.utils import timezone
 from .models import Office, Room, Workplace, Booking
 from .serializers import OfficeSerializer, RoomSerializer, WorkplaceSerializer, BookingSerializer
 
-User = get_user_model()
-
+# Представление для модели Office
 class OfficeViewSet(viewsets.ModelViewSet):
     queryset = Office.objects.all()
     serializer_class = OfficeSerializer
     permission_classes = [IsAuthenticated]
 
+# Представление для модели Room
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     permission_classes = [IsAuthenticated]
 
+# Представление для модели Workplace
 class WorkplaceViewSet(viewsets.ModelViewSet):
     queryset = Workplace.objects.all()
     serializer_class = WorkplaceSerializer
     permission_classes = [IsAuthenticated]
 
+# Представление для модели Booking
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer

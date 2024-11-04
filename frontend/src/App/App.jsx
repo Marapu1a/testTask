@@ -4,7 +4,7 @@ import Login from '../Login/Login';
 import MainContent from '../MainContent/MainContent';
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // При загрузке компонента проверяем, есть ли токен в localStorage
@@ -15,10 +15,10 @@ function App() {
     }
   }, []);
 
-    const handleLogin = (token) => {
-        setAuthToken(token);
-        setIsAuthenticated(true);
-    };
+  const handleLogin = (token) => {
+    setAuthToken(token);  // Устанавливаем токен в заголовки
+    setIsAuthenticated(true);  // Обновляем состояние
+  };
 
   const handleLogout = () => {
     logoutUser();  // Очищаем токен из заголовков и localStorage

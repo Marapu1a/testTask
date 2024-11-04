@@ -1,8 +1,9 @@
 import axios from 'axios';
 
+// Базовый URL для запросов
 const API_URL = 'http://127.0.0.1:8000/api';
 
-// Установка токена авторизации
+// Установка токена в заголовки
 export const setAuthToken = (token) => {
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -13,17 +14,7 @@ export const setAuthToken = (token) => {
     }
 };
 
-// Обновление токена авторизации
-export const refreshAuthToken = async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!refreshToken) throw new Error('Refresh token отсутствует');
-    const response = await axios.post(`${API_URL}/token/refresh/`, { refresh: refreshToken });
-    const newAccessToken = response.data.access;
-    setAuthToken(newAccessToken);
-    return newAccessToken;
-};
-
-// Логин пользователя
+// Функция для входа (аутентификация пользователя)
 export const loginUser = async (email, password) => {
     try {
         const response = await axios.post(`${API_URL}/token/`, { email, password });

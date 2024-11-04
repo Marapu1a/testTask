@@ -1,24 +1,22 @@
 from rest_framework import serializers
 from .models import Office, Room, Workplace, Booking
 
+# Сериализатор для модели Office
 class OfficeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Office
         fields = ['id', 'name', 'address']
 
+# Сериализатор для модели Room
 class RoomSerializer(serializers.ModelSerializer):
     office = serializers.PrimaryKeyRelatedField(queryset=Office.objects.all())
     workplaces = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    available_workplaces = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
-        fields = ['id', 'number', 'capacity', 'office', 'workplaces', 'available_workplaces']
+        fields = ['id', 'number', 'capacity', 'office', 'workplaces']
 
-    def get_available_workplaces(self, obj):
-        # Подсчитываем количество свободных рабочих мест в комнате
-        return obj.workplaces.filter(is_occupied=False).count()
-
+# Сериализатор для модели Workplace
 class WorkplaceSerializer(serializers.ModelSerializer):
     room = serializers.PrimaryKeyRelatedField(queryset=Room.objects.all())
 
@@ -26,6 +24,7 @@ class WorkplaceSerializer(serializers.ModelSerializer):
         model = Workplace
         fields = ['id', 'number', 'is_occupied', 'room']
 
+# Сериализатор для модели Booking с проверкой пересечения времени
 class BookingSerializer(serializers.ModelSerializer):
     workplace = serializers.PrimaryKeyRelatedField(queryset=Workplace.objects.all())
     user_email = serializers.EmailField(source='user.email', read_only=True)  # Добавляем email пользователя
@@ -35,7 +34,7 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = ['id', 'workplace', 'user', 'user_email', 'start_time', 'end_time']  # Включаем user_email
 
     def validate(self, data):
-        """Проверка на пересечение времени бронирования."""
+        """Проверка на пересечение времени бронирования"""
         start_time = data['start_time']
         end_time = data['end_time']
         workplace = data['workplace']
