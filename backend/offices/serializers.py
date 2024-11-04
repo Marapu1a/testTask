@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.utils import timezone
 from .models import Office, Room, Workplace, Booking
 
 # Сериализатор для модели Office
@@ -28,10 +27,11 @@ class WorkplaceSerializer(serializers.ModelSerializer):
 # Сериализатор для модели Booking с проверкой пересечения времени
 class BookingSerializer(serializers.ModelSerializer):
     workplace = serializers.PrimaryKeyRelatedField(queryset=Workplace.objects.all())
-    
+    user_email = serializers.EmailField(source='user.email', read_only=True)  # Добавляем email пользователя
+
     class Meta:
         model = Booking
-        fields = ['id', 'workplace', 'user', 'start_time', 'end_time']
+        fields = ['id', 'workplace', 'user', 'user_email', 'start_time', 'end_time']  # Включаем user_email
 
     def validate(self, data):
         """Проверка на пересечение времени бронирования"""

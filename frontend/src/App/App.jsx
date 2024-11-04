@@ -7,11 +7,11 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Проверка токена в localStorage при загрузке
+    // При загрузке компонента проверяем, есть ли токен в localStorage
     const token = localStorage.getItem('token');
     if (token) {
-      setAuthToken(token);
-      setIsAuthenticated(true);
+      setAuthToken(token);  // Устанавливаем токен для авторизации
+      setIsAuthenticated(true);  // Обновляем состояние авторизации
     }
   }, []);
 
@@ -21,7 +21,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    logoutUser();  // Удаляем токен
+    logoutUser();  // Очищаем токен из заголовков и localStorage
     setIsAuthenticated(false);  // Сбрасываем авторизацию
   };
 
@@ -30,7 +30,7 @@ function App() {
       {isAuthenticated ? (
         <MainContent onLogout={handleLogout} />  // Основной контент для авторизованных пользователей
       ) : (
-        <Login onLogin={handleLogin} />
+        <Login onLogin={handleLogin} />  // Форма авторизации для неавторизованных пользователей
       )}
     </div>
   );

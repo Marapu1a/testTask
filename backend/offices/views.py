@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
+from django.utils import timezone
 from .models import Office, Room, Workplace, Booking
 from .serializers import OfficeSerializer, RoomSerializer, WorkplaceSerializer, BookingSerializer
 
@@ -38,7 +39,15 @@ def get_rooms(request, office_id):
     rooms = Room.objects.filter(office_id=office_id).values('id', 'number')
     return JsonResponse(list(rooms), safe=False)
 
-# Функция для получения списка всех рабочих мест по комнате
+# Функция для получения списка всех рабочих мест по комнате с динамическим is_occupied
 def get_workplaces(request, room_id):
-    workplaces = Workplace.objects.filter(room_id=room_id).values('id', 'number', 'is_occupied')
+    workplaces = Workplace.objects.filter(room_id=room_id).values('id', 'number')
+    for workplace in workplaces:
+        # Определяем, занято ли рабочее место на основе активных бронирований
+        active_booking_exists = Booking.objects.filter(
+            workplace_id=workplace['id'],
+            start_time__lte=timezone.now(),
+            end_time__gte=timezone.now()
+        ).exists()
+        workplace['is_occupied'] = active_booking_exists  # Устанавливаем is_occupied в зависимости от бронирований
     return JsonResponse(list(workplaces), safe=False)

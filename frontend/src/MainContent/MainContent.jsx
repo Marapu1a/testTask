@@ -6,7 +6,7 @@ function MainContent({ onLogout }) {
     <div>
       <h1>Добро пожаловать!</h1>
       <button onClick={onLogout}>Выйти</button>
-      <OfficeRoomStatus />  {/* Вставляем компонент статуса рабочих мест */}
+      <OfficeRoomStatus />  {/* Подключаем компонент статуса рабочих мест */}
     </div>
   );
 }

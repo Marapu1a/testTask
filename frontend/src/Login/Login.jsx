@@ -10,10 +10,11 @@ function Login({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Логиним пользователя и устанавливаем токен при успехе
       const token = await loginUser(email, password);
-      setAuthToken(token);  // Устанавливаем access-токен в заголовки и сохраняем его
-      onLogin(token);        // Передаём родителю (App), что пользователь авторизован
-      setError(null);        // Сбрасываем ошибку, если вход успешен
+      setAuthToken(token);  // Устанавливаем токен в заголовки
+      onLogin(token);  // Передаём родителю (App), что пользователь авторизован
+      setError(null);  // Сбрасываем ошибку, если вход успешен
     } catch (err) {
       setError('Неверные данные для входа', err);
     }
