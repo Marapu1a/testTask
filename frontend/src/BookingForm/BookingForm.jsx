@@ -3,69 +3,71 @@ import { useEffect, useState } from 'react';
 import { getRoomAvailability, createBooking } from '../api';
 
 function BookingForm({ office }) {
-    const [rooms, setRooms] = useState([]);
-    const [selectedRoom, setSelectedRoom] = useState(null);
-    const [selectedWorkplace, setSelectedWorkplace] = useState(null);
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
-    const [error, setError] = useState('');
-    const [message, setMessage] = useState('');
+    const [rooms, setRooms] = useState([]); // Список комнат в офисе
+    const [selectedRoom, setSelectedRoom] = useState(null); // Выбранная комната
+    const [selectedWorkplace, setSelectedWorkplace] = useState(null); // Выбранное рабочее место
+    const [availableWorkplaces, setAvailableWorkplaces] = useState([]); // Доступные рабочие места для выбранной комнаты
+    const [startTime, setStartTime] = useState(''); // Время начала бронирования
+    const [endTime, setEndTime] = useState(''); // Время окончания бронирования
+    const [error, setError] = useState(''); // Ошибка для отображения пользователю
+    const [message, setMessage] = useState(''); // Успешное сообщение для отображения пользователю
 
-    useEffect(() => {
-        const loadRoomAvailability = async () => {
-            try {
-                const data = await getRoomAvailability(office.id);
-                setRooms(data);
-            } catch (err) {
-                setError('Не удалось загрузить доступность комнат', err);
-            }
-        };
-        loadRoomAvailability();
-    }, [office]);
-
-    const handleRoomSelect = (e) => {
-        const roomId = e.target.value;
-        const room = rooms.find((room) => room.room_id === Number(roomId));
-        setSelectedRoom(room);
-        setSelectedWorkplace(null); // Сбрасываем выбор рабочего места при смене комнаты
-    };
-
-    const handleWorkplaceSelect = (e) => {
-        setSelectedWorkplace(e.target.value);
-    };
-
-    const handleStartTimeChange = (e) => {
-        setStartTime(e.target.value);
-        // Сбрасываем дату окончания, если выбрана новая дата начала
-        if (endTime && e.target.value >= endTime) {
-            setEndTime('');
+    // Загрузка доступности комнат для офиса
+    const loadRoomAvailability = async () => {
+        try {
+            const data = await getRoomAvailability(office.id);
+            setRooms(data); // Сохраняем список комнат
+        } catch {
+            setError('Не удалось загрузить доступность комнат');
         }
     };
 
-    const handleEndTimeChange = (e) => {
-        setEndTime(e.target.value);
+    useEffect(() => {
+        loadRoomAvailability();
+    }, [office]);
+
+    // Обработка выбора комнаты
+    const handleRoomSelect = (e) => {
+        const roomId = Number(e.target.value);
+        const room = rooms.find((room) => room.id === roomId);
+        
+        if (room) {
+            setSelectedRoom(room); // Устанавливаем выбранную комнату
+            setAvailableWorkplaces(Array.from({ length: room.available_workplaces }, (_, i) => i + 1)); // Устанавливаем доступные рабочие места
+            setSelectedWorkplace(null); // Сбрасываем выбор рабочего места
+        } else {
+            setSelectedRoom(null);
+            setAvailableWorkplaces([]);
+        }
     };
 
+    // Обработка создания бронирования
     const handleBookingSubmit = async (e) => {
         e.preventDefault();
+
+        // Проверка наличия всех необходимых данных
         if (!selectedRoom || !selectedWorkplace || !startTime || !endTime) {
             setError('Пожалуйста, заполните все поля');
             return;
         }
+
+        // Проверка корректности времени
         if (endTime <= startTime) {
             setError('Дата окончания должна быть позже даты начала');
             return;
         }
+
         try {
-            await createBooking(selectedRoom.room_id, selectedWorkplace, startTime, endTime);
+            await createBooking(selectedRoom.id, selectedWorkplace, startTime, endTime); // Запрос на создание бронирования
             setMessage('Бронирование успешно создано!');
             setError('');
             setSelectedRoom(null);
             setSelectedWorkplace(null);
             setStartTime('');
             setEndTime('');
-        } catch (err) {
-            setError('Ошибка при создании бронирования', err);
+            loadRoomAvailability(); // Обновляем доступные комнаты после бронирования
+        } catch {
+            setError('Ошибка при создании бронирования');
         }
     };
 
@@ -74,39 +76,44 @@ function BookingForm({ office }) {
             <h3>Доступные комнаты для офиса: {office.address}</h3>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {message && <p style={{ color: 'green' }}>{message}</p>}
+
+            {/* Выбор комнаты */}
             <select onChange={handleRoomSelect} defaultValue="">
                 <option value="" disabled>Выберите комнату</option>
                 {rooms.map((room) => (
-                    <option key={room.room_id} value={room.room_id}>
-                        Комната {room.room_number} — Свободных мест: {room.available_workplaces}
+                    <option key={room.id} value={room.id}>
+                        Комната {room.number} — Свободных мест: {room.available_workplaces}
                     </option>
                 ))}
             </select>
 
+            {/* Выбор рабочего места */}
             {selectedRoom && (
                 <>
-                    <select onChange={handleWorkplaceSelect} defaultValue="">
+                    <select onChange={(e) => setSelectedWorkplace(Number(e.target.value))} defaultValue="">
                         <option value="" disabled>Выберите рабочее место</option>
-                        {Array.from({ length: selectedRoom.available_workplaces }, (_, i) => i + 1).map((workplace) => (
+                        {availableWorkplaces.map((workplace) => (
                             <option key={workplace} value={workplace}>
                                 Рабочее место {workplace}
                             </option>
                         ))}
                     </select>
+
+                    {/* Форма для указания времени бронирования */}
                     <form onSubmit={handleBookingSubmit}>
                         <label>Начало бронирования:</label>
                         <input
                             type="datetime-local"
                             value={startTime}
-                            onChange={handleStartTimeChange}
+                            onChange={(e) => setStartTime(e.target.value)}
                         />
 
                         <label>Конец бронирования:</label>
                         <input
                             type="datetime-local"
                             value={endTime}
-                            onChange={handleEndTimeChange}
-                            min={startTime || undefined} // Устанавливаем минимальное значение для endTime
+                            onChange={(e) => setEndTime(e.target.value)}
+                            min={startTime || undefined}
                         />
 
                         <button type="submit">Забронировать</button>

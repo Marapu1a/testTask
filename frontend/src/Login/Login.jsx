@@ -1,49 +1,34 @@
 import { useState } from 'react';
-import { loginUser, setAuthToken } from '../api';
+import { loginUser } from '../api';
 
 // eslint-disable-next-line react/prop-types
 function Login({ onLogin }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const token = await loginUser(email, password);
-      setAuthToken(token);  // Устанавливаем access-токен в заголовки и сохраняем его
-      onLogin(token);        // Передаём родителю (App), что пользователь авторизован
-      setError(null);        // Сбрасываем ошибку, если вход успешен
-    } catch (err) {
-      setError('Неверные данные для входа', err);
-    }
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const token = await loginUser(email, password);
+            onLogin(token);
+            setError(null);
+        } catch {
+            setError('Неверные данные для входа');
+        }
+    };
 
-  return (
-    <div>
-      <h2>Вход</h2>
-      <form onSubmit={handleSubmit}>
+    return (
         <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+            <h2>Вход</h2>
+            <form onSubmit={handleSubmit}>
+                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <button type="submit">Войти</button>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+            </form>
         </div>
-        <div>
-          <label>Пароль:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">Войти</button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
-    </div>
-  );
+    );
 }
 
 export default Login;
