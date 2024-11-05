@@ -1,0 +1,66 @@
+/* Стиль для обертки статуса рабочих мест */
+.office-room-status {
+    background-color: #2a2a2a;
+    /* Темный фон */
+    padding: 20px;
+    border-radius: 8px;
+    color: #f5f5f5;
+    /* Светлый текст */
+    max-width: 500px;
+    margin: 20px auto;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Заголовок */
+.office-room-status h2 {
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Отступы и стили для селекторов */
+.office-room-status select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    background-color: #404040;
+    /* Темный фон для select */
+    color: #f5f5f5;
+    /* Светлый текст */
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+
+/* Стили для таблицы рабочих мест */
+.workplace-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.workplace-table th,
+.workplace-table td {
+    padding: 10px;
+    border: 1px solid #444;
+    text-align: center;
+}
+
+.workplace-table th {
+    background-color: #333;
+}
+
+.workplace-table td {
+    background-color: #3a3a3a;
+}
+
+/* Стили для статуса рабочего места */
+.workplace-table .occupied {
+    color: #e74c3c;
+    /* Красный для занятых мест */
+}
+
+.workplace-table .available {
+    color: #2ecc71;
+    /* Зеленый для свободных мест */
+}

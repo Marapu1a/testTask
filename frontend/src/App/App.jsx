@@ -2,35 +2,36 @@ import { useState, useEffect } from 'react';
 import { setAuthToken, logoutUser } from '../api';
 import Login from '../Login/Login';
 import MainContent from '../MainContent/MainContent';
+import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // При загрузке компонента проверяем, есть ли токен в localStorage
     const token = localStorage.getItem('token');
     if (token) {
-      setAuthToken(token);  // Устанавливаем токен для авторизации
-      setIsAuthenticated(true);  // Обновляем состояние авторизации
+      setAuthToken(token);
+      setIsAuthenticated(true);
     }
   }, []);
 
   const handleLogin = (token) => {
-    setAuthToken(token);  // Устанавливаем токен в заголовки
-    setIsAuthenticated(true);  // Обновляем состояние
+    setAuthToken(token);
+    setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
-    logoutUser();  // Очищаем токен из заголовков и localStorage
-    setIsAuthenticated(false);  // Сбрасываем авторизацию
+    logoutUser();
+    localStorage.removeItem("Email");
+    setIsAuthenticated(false);
   };
 
   return (
-    <div>
+    <div className="app-container">
       {isAuthenticated ? (
-        <MainContent onLogout={handleLogout} />  // Основной контент для авторизованных пользователей
+        <MainContent onLogout={handleLogout} />
       ) : (
-        <Login onLogin={handleLogin} />  // Форма авторизации для неавторизованных пользователей
+        <Login onLogin={handleLogin} />
       )}
     </div>
   );

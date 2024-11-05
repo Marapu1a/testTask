@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { loginUser, setAuthToken } from '../api';
+import './Login.css'
 
 // eslint-disable-next-line react/prop-types
 function Login({ onLogin }) {
@@ -13,6 +14,7 @@ function Login({ onLogin }) {
       // Логиним пользователя и устанавливаем токен при успехе
       const token = await loginUser(email, password);
       setAuthToken(token);  // Устанавливаем токен в заголовки
+      localStorage.setItem('Email', email); // Сохраняем в Еmail
       onLogin(token);  // Передаём родителю (App), что пользователь авторизован
       setError(null);  // Сбрасываем ошибку, если вход успешен
     } catch (err) {
@@ -21,9 +23,9 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div>
-      <h2>Вход</h2>
-      <form onSubmit={handleSubmit}>
+    <div className='login-container'>
+      <form className='login-form' onSubmit={handleSubmit}>
+        <h2>Вход</h2>
         <div>
           <label>Email:</label>
           <input

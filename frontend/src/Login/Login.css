@@ -1,0 +1,63 @@
+/* Login.css */
+
+body {
+    background-color: #1e1e1e; /* Ставим тот же цвет фона, что и в App.css */
+    color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #282828;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
+}
+
+.login-form h2 {
+    color: #d9d9d9;
+    margin-bottom: 20px;
+}
+
+.login-form label {
+    color: #b3b3b3;
+}
+
+.login-form input {
+    width: 91%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #444;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    background-color: #555;
+}
+
+.error {
+    color: #ff6b6b;
+}

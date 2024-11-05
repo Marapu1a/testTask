@@ -3,6 +3,7 @@ import { getOffices, getRooms, getWorkplaces } from '../api';
 import OfficeSelect from '../OfficeSelect/OfficeSelect';
 import RoomSelect from '../RoomSelect/RoomSelect';
 import WorkplaceTable from '../WorkplaceTable/WorkplaceTable';
+import './OfficeRoomStatus.css';
 
 function OfficeRoomStatus() {
   const [offices, setOffices] = useState([]);
@@ -45,10 +46,19 @@ function OfficeRoomStatus() {
   }, [selectedRoom]);
 
   return (
-    <div>
+    <div className="office-room-status">
       <h2>Статус рабочих мест</h2>
-      <OfficeSelect offices={offices} selectedOffice={selectedOffice} onSelectOffice={setSelectedOffice} />
-      <RoomSelect rooms={rooms} selectedRoom={selectedRoom} onSelectRoom={setSelectedRoom} disabled={!selectedOffice} />
+      <OfficeSelect 
+        offices={offices} 
+        selectedOffice={selectedOffice} 
+        onSelectOffice={setSelectedOffice} 
+      />
+      <RoomSelect 
+        rooms={rooms} 
+        selectedRoom={selectedRoom} 
+        onSelectRoom={setSelectedRoom} 
+        disabled={!selectedOffice} 
+      />
       {workplaces.length > 0 && <WorkplaceTable workplaces={workplaces} />}
     </div>
   );

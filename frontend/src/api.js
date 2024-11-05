@@ -93,3 +93,39 @@ export const getUserById = async (userId) => {
         throw error;
     }
 };
+
+// API запрос для бронирования
+export const createBooking = async ({ workplace, user, start_time, end_time }) => {
+    try {
+        const response = await axios.post(`${API_URL}/bookings/`, {
+            workplace,
+            user,   // передаем userId
+            start_time,
+            end_time
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при создании бронирования:', error);
+        throw error; // Ретранслируем ошибку для обработки в компоненте
+    }
+};
+
+// API для получения userId по email
+export const getUserByEmail = async (email) => {
+    try {
+        const response = await axios.get(`${API_URL}/users`); // получаем всех пользователей
+        const users = response.data;
+
+        // Ищем пользователя с нужным email
+        const user = users.find((user) => user.email === email);
+
+        if (user) {
+            return user; // Возвращаем объект пользователя, если найден
+        } else {
+            throw new Error('Пользователь с таким email не найден');
+        }
+    } catch (error) {
+        console.error('Ошибка при получении userId по email:', error);
+        throw error;
+    }
+};

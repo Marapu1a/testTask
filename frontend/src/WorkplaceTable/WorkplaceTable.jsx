@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import WorkplaceDetails from '../WorkplaceDetails/WorkplaceDetails';
+import './WorkplaceTable.css';
 
 /* eslint-disable react/prop-types */
 function WorkplaceTable({ workplaces }) {
@@ -10,7 +11,7 @@ function WorkplaceTable({ workplaces }) {
   };
 
   return (
-    <div>
+    <div className="table-container">
       {selectedWorkplace ? (
         <WorkplaceDetails 
           workplace={selectedWorkplace}  // Передаем объект workplace
@@ -32,7 +33,7 @@ function WorkplaceTable({ workplaces }) {
                 style={{ cursor: 'pointer' }}
               >
                 <td>Workplace {workplace.number}</td>
-                <td style={{ color: workplace.is_occupied ? 'red' : 'green' }}>
+                <td className={`status ${workplace.is_occupied ? 'status-occupied' : 'status-free'}`}>
                   {workplace.is_occupied ? 'Занято' : 'Свободно'}
                 </td>
               </tr>

@@ -1,5 +1,14 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from .models import Office, Room, Workplace, Booking
+
+User = get_user_model()
+
+# Сериализатор для модели User
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'is_active', 'is_staff']
 
 # Сериализатор для модели Office
 class OfficeSerializer(serializers.ModelSerializer):

@@ -1,0 +1,54 @@
+.table-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+table {
+    width: 80%;
+    border-collapse: collapse;
+    background-color: #333;
+    color: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+thead {
+    background-color: #444;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #3b3b3b;
+}
+
+tr:hover {
+    background-color: #555;
+}
+
+td.status {
+    font-weight: bold;
+    color: inherit;
+    /* Наследует цвет на основе статуса */
+    transition: color 0.3s ease;
+}
+
+td.status-free {
+    color: #4caf50;
+    /* Зеленый для свободных мест */
+}
+
+td.status-occupied {
+    color: #f44336;
+    /* Красный для занятых мест */
+}

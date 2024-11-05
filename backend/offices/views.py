@@ -1,10 +1,19 @@
 from django.shortcuts import render
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from .models import Office, Room, Workplace, Booking
-from .serializers import OfficeSerializer, RoomSerializer, WorkplaceSerializer, BookingSerializer
+from .serializers import UserSerializer, OfficeSerializer, RoomSerializer, WorkplaceSerializer, BookingSerializer
+
+User = get_user_model()
+
+# Вьюсет для модели пользователя
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
 # Представление для модели Office
 class OfficeViewSet(viewsets.ModelViewSet):
